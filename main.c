@@ -40,6 +40,10 @@
 #include "driverlib/interrupt.h"
 #include "driverlib/timer.h"
 #include "driverlib/uart.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
 // Basically here I'm checking that everything works fine.
 volatile unsigned long count;
 
@@ -60,7 +64,14 @@ int main(void) {
   GPIOPinConfigure(GPIO_PA0_U0RX);
   GPIOPinConfigure(GPIO_PA1_U0TX);
   GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-  
+
+  unsigned char* test = malloc(1024); // ask for a kb 
+  int i;
+  for (i=0; i<10; i++)
+    test[i] = i+0x30; 
+  test[i]=0;
+  printf("test string: %s\r\n", test);
+  free(test); // didnt want it...   
 
   SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
 	TimerConfigure(TIMER1_BASE, TIMER_CFG_SPLIT_PAIR | TIMER_CFG_A_PERIODIC);
